@@ -142,6 +142,7 @@ final class SerializerTest extends TestCase
             $categories['data'][1]['relationships']['parent']['data']
         );
         self::assertSame('channel', $channels['data'][0]['type']);
+        self::assertSame('1970-01-01T00:00:00+00:00', $channels['data'][0]['attributes']['createdAt']);
         self::assertSame(
             ['type' => 'channel-category', 'id' => '2'],
             $channels['data'][0]['relationships']['categories']['data'][0]

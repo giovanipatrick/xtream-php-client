@@ -261,7 +261,7 @@ final class JsonApiSerializer extends AbstractSerializer
     private function jsonValue($value)
     {
         if ($value instanceof DateTimeInterface) {
-            return $value->format(DateTimeInterface::ATOM);
+            return $value->format(DATE_ATOM);
         }
 
         if (!is_array($value)) {

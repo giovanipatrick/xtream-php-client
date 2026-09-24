@@ -13,3 +13,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PHP 7.0+ compatibility policy and CI matrix.
 - English and Brazilian Portuguese documentation.
 - Automated documentation and release workflows.
+- cURL transport with configurable timeouts, TLS verification, redirects, and
+  user agent.
+- Player API methods for profiles, categories, live channels, VOD, series, and
+  EPG data.
+- Stream, timeshift, and XMLTV URL generation.
+- Unit and opt-in provider integration test suites.

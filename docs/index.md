@@ -7,9 +7,9 @@ Xtream-compatible IPTV Player APIs.
     The project is currently in pre-release development. Public APIs may change
     before version 1.0.0.
 
-The planned client covers account and server information, live TV, VOD, series,
-episodes, EPG data, stream URL generation, pagination, and response
-normalization.
+The client covers account and server information, live TV, VOD, series,
+episodes, EPG data, stream URL generation, and pagination. Response
+normalization and serializers are planned for the next milestone.
 
 ## Design principles
 

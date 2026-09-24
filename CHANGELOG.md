@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-09-24
+
+### Added
+
+- Camel Case, Standardized, and JSON:API response serializers.
+- Partial custom serializers through resource-specific callbacks.
+- Serializer type introspection through `Client::getSerializerType()`.
+
 ## [0.1.0] - 2026-09-24
 
 ### Added
@@ -22,5 +30,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Stream, timeshift, and XMLTV URL generation.
 - Unit and opt-in provider integration test suites.
 
-[Unreleased]: https://github.com/giovanipatrick/xtream-php-client/compare/v0.1.0...HEAD
+[Unreleased]: https://github.com/giovanipatrick/xtream-php-client/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/giovanipatrick/xtream-php-client/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/giovanipatrick/xtream-php-client/releases/tag/v0.1.0

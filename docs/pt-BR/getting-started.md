@@ -23,12 +23,14 @@ composer require giovanipatrick/xtream-php-client
 require __DIR__ . '/vendor/autoload.php';
 
 use Xtream\Client;
+use Xtream\Serializer\StandardizedSerializer;
 
 $client = new Client([
     'url' => 'https://example.com',
     'username' => 'username',
     'password' => 'password',
     'preferred_format' => 'm3u8',
+    'serializer' => new StandardizedSerializer(),
 ]);
 ```
 
@@ -43,4 +45,6 @@ $categories = $client->getChannelCategories();
 $channels = $client->getChannels(['category_id' => 10]);
 ```
 
-Atualmente, os métodos retornam arrays associativos raw recebidos do provedor.
+Omita `serializer` para receber os arrays raw do provedor. Consulte a
+[referência da API](../api-reference.md) para os serializadores, endpoints e
+opções disponíveis.

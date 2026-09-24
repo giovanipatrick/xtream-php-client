@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/giovanipatrick/xtream-php-client/actions/workflows/ci.yml/badge.svg)](https://github.com/giovanipatrick/xtream-php-client/actions/workflows/ci.yml)
 [![Documentation](https://github.com/giovanipatrick/xtream-php-client/actions/workflows/docs.yml/badge.svg)](https://github.com/giovanipatrick/xtream-php-client/actions/workflows/docs.yml)
+[![Latest Stable Version](https://poser.pugx.org/giovanipatrick/xtream-php-client/v/stable)](https://packagist.org/packages/giovanipatrick/xtream-php-client)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 English | [Português do Brasil](README.pt-BR.md)
@@ -19,11 +20,12 @@ A PHP 7.0+ client for Xtream-compatible IPTV Player APIs.
 - Live, movie, episode, timeshift, and XMLTV URL generation.
 - URL-safe credentials and exceptions that do not expose responses or secrets.
 - Injectable HTTP transport for deterministic tests.
+- Raw, Camel Case, Standardized, JSON:API, and custom callback responses.
 - Remain compatible with PHP 7.0 through current PHP versions.
 - Keep the runtime lightweight and framework-independent.
 
-Response serializers and normalized data models are planned for a later
-development milestone. Current methods return raw associative arrays.
+Methods return raw associative arrays by default. Optional serializers can
+normalize every response without changing endpoint calls.
 
 ## Requirements
 
@@ -48,12 +50,14 @@ composer require giovanipatrick/xtream-php-client
 require __DIR__ . '/vendor/autoload.php';
 
 use Xtream\Client;
+use Xtream\Serializer\StandardizedSerializer;
 
 $client = new Client([
     'url' => 'https://example.com',
     'username' => 'username',
     'password' => 'password',
     'preferred_format' => 'm3u8',
+    'serializer' => new StandardizedSerializer(),
 ]);
 
 $profile = $client->getProfile();
@@ -73,6 +77,10 @@ $show = $client->getShow(['show_id' => 456]);
 $shortEpg = $client->getShortEpg(['channel_id' => 789, 'limit' => 5]);
 $fullEpg = $client->getFullEpg(['channel_id' => 789]);
 ```
+
+Available serializers are `CamelCaseSerializer`, `StandardizedSerializer`,
+and `JsonApiSerializer`. Use `CallbackSerializer` to override only selected
+resource responses. Omit the `serializer` option to keep raw provider arrays.
 
 Both `snake_case` option names and their camelCase counterparts from the
 TypeScript inspiration are accepted. See the

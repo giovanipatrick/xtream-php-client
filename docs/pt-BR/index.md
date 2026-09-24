@@ -8,8 +8,8 @@ IPTV Player compatíveis com Xtream.
     antes da versão 1.0.0.
 
 O cliente cobre informações da conta e do servidor, TV ao vivo, VOD, séries,
-episódios, dados de EPG, geração de URLs de stream e paginação. Normalização de
-respostas e serializadores estão planejados para o próximo marco.
+episódios, dados de EPG, geração de URLs de stream, paginação e serialização
+opcional em Camel Case, Standardized, JSON:API ou callbacks customizados.
 
 ## Princípios de projeto
 

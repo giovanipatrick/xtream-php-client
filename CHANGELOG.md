@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-09-24
+
 ### Added
 
 - Initial Composer package structure.
@@ -19,3 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   EPG data.
 - Stream, timeshift, and XMLTV URL generation.
 - Unit and opt-in provider integration test suites.
+
+[Unreleased]: https://github.com/giovanipatrick/xtream-php-client/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/giovanipatrick/xtream-php-client/releases/tag/v0.1.0

@@ -17,10 +17,10 @@ Every commit message must be written in English and follow the project's
 Conventional Commits convention:
 
 ```text
-<emoji> <type>(optional-scope): <short imperative description>
+[optional emoji] <type>(optional-scope): <short imperative description>
 ```
 
-Common combinations include:
+Emojis are optional. Common combinations include:
 
 | Change | Format |
 | --- | --- |

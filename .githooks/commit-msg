@@ -3,11 +3,11 @@
 message_file="$1"
 first_line=$(sed -n '1p' "$message_file")
 
-pattern='^(✨|🐛|📚|✅|🧪|📦|➕|➖|⚡|♻️|🎨|🔧|🧱|🗃️|🧹|🗑️|🔒️|🎉) (feat|fix|docs|test|build|perf|style|refactor|chore|ci|raw|cleanup|remove|init)(\([a-z0-9._/-]+\))?!?: .+'
+pattern='^((✨|🐛|📚|✅|🧪|📦|➕|➖|⚡|♻️|🎨|🔧|🧱|🗃️|🧹|🗑️|🔒️|🎉) )?(feat|fix|docs|test|build|perf|style|refactor|chore|ci|raw|cleanup|remove|init)(\([a-z0-9._/-]+\))?!?: .+'
 
 if ! printf '%s\n' "$first_line" | grep -Eq "$pattern"; then
     printf '%s\n' 'Invalid commit message.' >&2
-    printf '%s\n' 'Expected: <emoji> <type>(optional-scope): <English description>' >&2
-    printf '%s\n' 'Example: ✨ feat: add channel categories' >&2
+    printf '%s\n' 'Expected: [optional emoji] <type>(optional-scope): <English description>' >&2
+    printf '%s\n' 'Example: feat: add channel categories' >&2
     exit 1
 fi

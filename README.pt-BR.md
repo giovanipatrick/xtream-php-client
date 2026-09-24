@@ -86,8 +86,8 @@ real.
 - O trabalho começa em uma branch dedicada para recurso, correção, documentação
   ou manutenção.
 - Pull requests devem passar por toda a matriz de compatibilidade com PHP.
-- Commits seguem Conventional Commits, são escritos em inglês e incluem o emoji
-  correspondente descrito no [guia de contribuição](CONTRIBUTING.md).
+- Commits seguem Conventional Commits, são escritos em inglês e podem incluir
+  opcionalmente o emoji descrito no [guia de contribuição](CONTRIBUTING.md).
 - Releases seguem Versionamento Semântico e são criados a partir de tags
   assinadas no formato `vX.Y.Z`.
 

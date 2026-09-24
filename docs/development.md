@@ -17,8 +17,8 @@ checks on every supported PHP version.
 
 ## Commit messages
 
-Commits must be written in English and follow the emoji-prefixed Conventional
-Commits format documented in `CONTRIBUTING.md`.
+Commits must be written in English and follow the Conventional Commits format
+documented in `CONTRIBUTING.md`. Emojis are optional.
 
 Enable the local validator:
 

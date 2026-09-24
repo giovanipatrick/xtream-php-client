@@ -83,8 +83,8 @@ not run live-provider tests.
 - `main` contains reviewed and tested code only.
 - Work starts in a dedicated feature, fix, documentation, or maintenance branch.
 - Pull requests must pass the complete PHP compatibility matrix.
-- Commits use Conventional Commits, are written in English, and include the
-  matching emoji described in [CONTRIBUTING.md](CONTRIBUTING.md).
+- Commits use Conventional Commits, are written in English, and may include an
+  optional matching emoji as described in [CONTRIBUTING.md](CONTRIBUTING.md).
 - Releases follow Semantic Versioning and are created from signed `vX.Y.Z` tags.
 
 See the [documentation site](https://giovanipatrick.github.io/xtream-php-client/)

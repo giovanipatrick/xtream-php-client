@@ -34,4 +34,3 @@ $client = new Client([
 
 Nunca faça commit de credenciais reais. Nas aplicações, carregue-as por
 variáveis de ambiente ou por um gerenciador de segredos.
-

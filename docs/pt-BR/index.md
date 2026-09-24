@@ -20,4 +20,3 @@ normalização das respostas.
 - Dados normalizados previsíveis sem perder acesso às respostas originais.
 
 Continue em [Primeiros passos](getting-started.md).
-

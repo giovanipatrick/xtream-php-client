@@ -34,4 +34,3 @@ $client = new Client([
 
 Never commit real credentials. Load them from environment variables or a
 secret manager in applications.
-

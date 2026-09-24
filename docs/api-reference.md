@@ -34,4 +34,3 @@ $client->getPreferredFormat();
 ```
 
 The password is deliberately not exposed through a public accessor.
-

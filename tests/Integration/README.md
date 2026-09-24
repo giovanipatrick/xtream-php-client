@@ -17,4 +17,3 @@ Live tests must:
 
 Copy `.env.example` to `.env`, fill it locally, and load it in the shell before
 running the integration suite. The `.env` file is ignored by Git.
-

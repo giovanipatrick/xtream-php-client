@@ -14,4 +14,3 @@ feature for this repository.
 
 Remove credentials and personal provider data from every reproduction. If a
 credential was exposed, revoke or rotate it immediately.
-

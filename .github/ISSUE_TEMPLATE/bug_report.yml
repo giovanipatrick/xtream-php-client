@@ -46,4 +46,3 @@ body:
       description: Do not paste secrets or real provider responses.
     validations:
       required: true
-

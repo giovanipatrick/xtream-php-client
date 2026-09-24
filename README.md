@@ -34,15 +34,7 @@ development milestone. Current methods return raw associative arrays.
 
 ## Installation
 
-The package has not been released on Packagist yet. During development, add
-the repository as a VCS dependency:
-
-```bash
-composer config repositories.xtream-php-client vcs https://github.com/giovanipatrick/xtream-php-client
-composer require giovanipatrick/xtream-php-client:dev-main
-```
-
-Tagged releases will later be installable with:
+Install the package from Packagist:
 
 ```bash
 composer require giovanipatrick/xtream-php-client

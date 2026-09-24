@@ -9,11 +9,10 @@
 
 ## Development installation
 
-Until the first Packagist release, install directly from the Git repository:
+Install the package from Packagist:
 
 ```bash
-composer config repositories.xtream-php-client vcs https://github.com/giovanipatrick/xtream-php-client
-composer require giovanipatrick/xtream-php-client:dev-main
+composer require giovanipatrick/xtream-php-client
 ```
 
 ## Configure a client

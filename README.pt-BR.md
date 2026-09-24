@@ -34,15 +34,7 @@ para um próximo marco. Atualmente, os métodos retornam arrays associativos raw
 
 ## Instalação
 
-O pacote ainda não foi publicado no Packagist. Durante o desenvolvimento,
-adicione o repositório como uma dependência VCS:
-
-```bash
-composer config repositories.xtream-php-client vcs https://github.com/giovanipatrick/xtream-php-client
-composer require giovanipatrick/xtream-php-client:dev-main
-```
-
-Após a publicação, versões etiquetadas poderão ser instaladas com:
+Instale o pacote pelo Packagist:
 
 ```bash
 composer require giovanipatrick/xtream-php-client

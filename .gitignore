@@ -1,0 +1,22 @@
+/vendor/
+/composer.lock
+/.phpunit.result.cache
+/.phpunit.cache/
+/build/
+/site/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+/auth.json
+
+# Live-provider output and private fixtures must remain local
+/tests/Fixtures/private/
+/var/
+
+# Editors and operating systems
+/.idea/
+/.vscode/
+.DS_Store
+Thumbs.db

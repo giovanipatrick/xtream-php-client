@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<ruleset name="Xtream PHP Client">
+    <description>Coding standards for Xtream PHP Client.</description>
+
+    <file>src</file>
+    <file>tests/Unit</file>
+
+    <arg name="basepath" value="."/>
+    <arg name="colors"/>
+    <arg value="sp"/>
+
+    <rule ref="PSR12"/>
+</ruleset>
+

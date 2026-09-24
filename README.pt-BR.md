@@ -11,23 +11,26 @@ Um cliente PHP 7.0+ para APIs IPTV Player compatíveis com Xtream.
 > Este projeto está em desenvolvimento ativo. A API pública poderá mudar antes
 > da primeira versão estável `1.0.0`.
 
-## Objetivos
+## Recursos
 
-- Suportar TV ao vivo, VOD, séries, episódios e dados de EPG.
-- Gerar URLs de streams ao vivo, filmes, episódios e timeshift.
-- Normalizar respostas inconsistentes de provedores compatíveis com Xtream.
-- Oferecer serializadores raw, camelCase, padronizado, JSON:API e personalizados.
+- Informações do perfil da conta e do servidor.
+- Endpoints de TV ao vivo, VOD, séries, episódios e EPG.
+- Filtros por categoria e paginação local.
+- Geração de URLs para live, filme, episódio, timeshift e XMLTV.
+- Credenciais codificadas com segurança e exceções sem respostas ou segredos.
+- Transporte HTTP injetável para testes determinísticos.
 - Permanecer compatível do PHP 7.0 às versões atuais do PHP.
 - Manter o runtime leve e independente de frameworks.
+
+Serializadores de respostas e modelos de dados normalizados estão planejados
+para um próximo marco. Atualmente, os métodos retornam arrays associativos raw.
 
 ## Requisitos
 
 - PHP 7.0 ou mais recente
+- Extensão cURL
 - Extensão JSON
 - Composer
-
-O transporte HTTP utilizará cURL quando as operações da Player API forem
-adicionadas.
 
 ## Instalação
 
@@ -45,10 +48,7 @@ Após a publicação, versões etiquetadas poderão ser instaladas com:
 composer require giovanipatrick/xtream-php-client
 ```
 
-## Uso atual
-
-O primeiro marco de desenvolvimento fornece validação das configurações. Os
-métodos de rede serão adicionados nos próximos marcos.
+## Uso
 
 ```php
 <?php
@@ -63,7 +63,29 @@ $client = new Client([
     'password' => 'password',
     'preferred_format' => 'm3u8',
 ]);
+
+$profile = $client->getProfile();
+$server = $client->getServerInfo();
+
+$channels = $client->getChannels([
+    'category_id' => 10,
+    'page' => 1,
+    'limit' => 50,
+]);
+
+$movies = $client->getMovies(['category_id' => 20]);
+$movie = $client->getMovie(['movie_id' => 123]);
+$shows = $client->getShows(['category_id' => 30]);
+$show = $client->getShow(['show_id' => 456]);
+
+$shortEpg = $client->getShortEpg(['channel_id' => 789, 'limit' => 5]);
+$fullEpg = $client->getFullEpg(['channel_id' => 789]);
 ```
+
+São aceitos tanto os nomes de opções em `snake_case` quanto as alternativas
+camelCase da inspiração em TypeScript. Consulte a
+[referência da API](https://giovanipatrick.github.io/xtream-php-client/api-reference/)
+para opções de transporte, geração de URLs e comportamento dos erros.
 
 ## Desenvolvimento
 
@@ -72,6 +94,13 @@ Instale as dependências de desenvolvimento e execute todas as verificações:
 ```bash
 composer install
 composer check
+```
+
+Para executar a suíte opcional contra o provedor real, exporte as variáveis de
+um arquivo local `.env`, ignorado pelo Git, e execute:
+
+```bash
+composer test:integration
 ```
 
 Testes unitários não devem depender de um provedor IPTV real. O código dos

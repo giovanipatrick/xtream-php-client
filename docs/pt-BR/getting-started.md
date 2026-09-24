@@ -3,6 +3,7 @@
 ## Requisitos
 
 - PHP 7.0 ou mais recente
+- Extensão cURL
 - Extensão JSON
 - Composer
 
@@ -34,3 +35,13 @@ $client = new Client([
 
 Nunca faça commit de credenciais reais. Nas aplicações, carregue-as por
 variáveis de ambiente ou por um gerenciador de segredos.
+
+## Fazer requisições
+
+```php
+$profile = $client->getProfile();
+$categories = $client->getChannelCategories();
+$channels = $client->getChannels(['category_id' => 10]);
+```
+
+Atualmente, os métodos retornam arrays associativos raw recebidos do provedor.

@@ -2,11 +2,11 @@
 
 ## `Xtream\Client`
 
-The client currently validates and stores its configuration. Player API
-operations will be introduced incrementally and documented here as they become
-available.
+The client communicates with `player_api.php` and returns raw associative
+arrays. Credentials are URL-encoded and are never included in library-generated
+exception messages.
 
-### Constructor
+## Constructor
 
 ```php
 new Client(array $options)
@@ -16,7 +16,7 @@ Required options:
 
 | Option | Type | Description |
 | --- | --- | --- |
-| `url` | `string` | Provider base URL without `player_api.php`. |
+| `url` | `string` | HTTP(S) provider base URL without `player_api.php`. |
 | `username` | `string` | Player API username. |
 | `password` | `string` | Player API password. |
 
@@ -24,13 +24,140 @@ Optional options:
 
 | Option | Type | Default | Description |
 | --- | --- | --- | --- |
-| `preferred_format` | `string` | `m3u8` | Preferred live stream format. |
+| `preferred_format` | `string` | `ts` | `ts`, `m3u8`, or `rtmp`. |
+| `timeout` | `int` | `30` | Complete request timeout in seconds. |
+| `connect_timeout` | `int` | `10` | Connection timeout in seconds. |
+| `verify_ssl` | `bool` | `true` | Verify the provider TLS certificate. |
+| `follow_redirects` | `bool` | `false` | Follow at most three HTTP redirects. |
+| `user_agent` | `string` | package identifier | HTTP User-Agent value. |
+| `http_client` | `HttpClientInterface` | cURL client | Custom injectable transport. |
 
-### Configuration accessors
+Disabling TLS verification should be limited to controlled development
+environments. Redirects are disabled by default because authentication is sent
+in the request query.
+
+## Account
 
 ```php
-$client->getBaseUrl();
-$client->getPreferredFormat();
+$profile = $client->getProfile();
+$server = $client->getServerInfo();
+$client->clearProfileCache();
 ```
 
-The password is deliberately not exposed through a public accessor.
+Profile and server information share one cached authentication request.
+Operations that require output-format information also populate this cache.
+
+## Categories
+
+```php
+$liveCategories = $client->getChannelCategories();
+$movieCategories = $client->getMovieCategories();
+$showCategories = $client->getShowCategories();
+```
+
+## Listings
+
+```php
+$channels = $client->getChannels([
+    'category_id' => 10,
+    'page' => 1,
+    'limit' => 50,
+]);
+
+$movies = $client->getMovies(['category_id' => 20]);
+$shows = $client->getShows(['category_id' => 30]);
+```
+
+`categoryId` is accepted as an alias for `category_id`. Pagination is local
+because common Xtream-compatible Player APIs return the complete category.
+When `page` is supplied without `limit`, the limit defaults to 10.
+
+Channel and movie listings receive a generated `url` field when the required
+stream identifiers are present.
+
+## Details
+
+```php
+$movie = $client->getMovie(['movie_id' => 123]);
+$show = $client->getShow(['show_id' => 456]);
+```
+
+`movieId` and `showId` camelCase aliases are also accepted. Movie results
+receive a top-level `url`. Each show episode receives its own `url`, and the
+requested series ID is added to `show['info']['series_id']`.
+
+## EPG
+
+```php
+$short = $client->getShortEpg([
+    'channel_id' => 789,
+    'limit' => 5,
+]);
+
+$full = $client->getFullEpg(['channel_id' => 789]);
+```
+
+`channelId` is accepted as an alias for `channel_id`.
+
+## Stream URLs
+
+```php
+$liveUrl = $client->generateStreamUrl([
+    'type' => 'channel',
+    'stream_id' => 789,
+    'extension' => 'm3u8',
+]);
+
+$movieUrl = $client->generateStreamUrl([
+    'type' => 'movie',
+    'stream_id' => 123,
+    'extension' => 'mkv',
+]);
+
+$episodeUrl = $client->generateStreamUrl([
+    'type' => 'episode',
+    'stream_id' => 456,
+    'extension' => 'mp4',
+]);
+```
+
+For channels, an unsupported requested format falls back to the first format
+listed in the cached user profile. A preferred `rtmp` format follows the
+reference library behavior and generates a `.ts` live URL.
+
+Timeshift uses a `DateTimeInterface` value. The timestamp is converted to UTC:
+
+```php
+$timeshiftUrl = $client->generateStreamUrl([
+    'type' => 'channel',
+    'stream_id' => 789,
+    'timeshift' => [
+        'start' => new DateTimeImmutable('2026-09-24 21:30:00 UTC'),
+        'duration' => 60,
+    ],
+]);
+```
+
+The XMLTV endpoint can be generated with:
+
+```php
+$xmltvUrl = $client->getXmltvUrl();
+```
+
+Generated media and XMLTV URLs contain the Player API credentials by protocol
+design. Treat them as secrets and never log or commit them.
+
+## Exceptions
+
+All runtime library exceptions inherit from `Xtream\Exception\XtreamException`:
+
+| Exception | Meaning |
+| --- | --- |
+| `AuthenticationException` | The provider rejected the account. |
+| `HttpException` | A non-2xx HTTP response was received. |
+| `NetworkException` | cURL could not complete the request. |
+| `InvalidResponseException` | JSON or response structure was invalid. |
+| `NotFoundException` | A requested movie or show was not found. |
+
+Invalid caller options raise `InvalidConfigurationException`, which extends
+PHP's `InvalidArgumentException`.

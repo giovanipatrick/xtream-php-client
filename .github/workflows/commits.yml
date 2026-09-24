@@ -25,7 +25,7 @@ jobs:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
-          pattern='^(✨|🐛|📚|✅|🧪|📦|➕|➖|⚡|♻️|🎨|🔧|🧱|🗃️|🧹|🗑️|🔒️|🎉) (feat|fix|docs|test|build|perf|style|refactor|chore|ci|raw|cleanup|remove|init)(\([a-z0-9._/-]+\))?!?: .+'
+          pattern='^((✨|🐛|📚|✅|🧪|📦|➕|➖|⚡|♻️|🎨|🔧|🧱|🗃️|🧹|🗑️|🔒️|🎉) )?(feat|fix|docs|test|build|perf|style|refactor|chore|ci|raw|cleanup|remove|init)(\([a-z0-9._/-]+\))?!?: .+'
           failed=0
           while IFS= read -r message; do
             if ! printf '%s\n' "$message" | grep -Eq "$pattern"; then

@@ -3,6 +3,7 @@ site_description: A PHP 7.0+ client for Xtream-compatible IPTV Player APIs.
 site_url: https://giovanipatrick.github.io/xtream-php-client/
 repo_url: https://github.com/giovanipatrick/xtream-php-client
 repo_name: giovanipatrick/xtream-php-client
+edit_uri: edit/main/docs/
 copyright: Copyright &copy; 2026 Giovani Patrick
 
 theme:
@@ -51,4 +52,3 @@ markdown_extensions:
       alternate_style: true
 
 strict: true
-

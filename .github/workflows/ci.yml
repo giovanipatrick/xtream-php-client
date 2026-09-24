@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-      - "codex/**"
-      - "feat/**"
-      - "fix/**"
-      - "chore/**"
   pull_request:
 
 permissions:
@@ -51,4 +47,3 @@ jobs:
 
       - name: Run quality checks
         run: composer check
-

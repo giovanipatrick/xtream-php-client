@@ -19,7 +19,7 @@ final class ClientTest extends TestCase
         ]);
 
         self::assertSame('https://example.com', $client->getBaseUrl());
-        self::assertSame('m3u8', $client->getPreferredFormat());
+        self::assertSame('ts', $client->getPreferredFormat());
     }
 
     public function testItAcceptsACustomPreferredFormat()
@@ -59,5 +59,16 @@ final class ClientTest extends TestCase
                 self::assertNotSame('', $exception->getMessage());
             }
         }
+    }
+
+    public function testItRejectsInvalidBaseUrls()
+    {
+        $this->expectException(InvalidConfigurationException::class);
+
+        new Client([
+            'url' => 'ftp://example.com/list?token=secret',
+            'username' => 'user',
+            'password' => 'secret',
+        ]);
     }
 }

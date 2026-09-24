@@ -16,4 +16,11 @@ Live tests must:
 5. Run only through an explicit local command, never in public CI.
 
 Copy `.env.example` to `.env`, fill it locally, and load it in the shell before
-running the integration suite. The `.env` file is ignored by Git.
+running the integration suite. The `.env` file is ignored by Git:
+
+```bash
+set -a
+. ./.env
+set +a
+composer test:integration
+```

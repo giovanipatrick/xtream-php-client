@@ -21,4 +21,3 @@ normalization.
 
 Continue with [Getting started](getting-started.md), or read this page in
 [Brazilian Portuguese](pt-BR/index.md).
-

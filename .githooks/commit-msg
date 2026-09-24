@@ -11,4 +11,3 @@ if ! printf '%s\n' "$first_line" | grep -Eq "$pattern"; then
     printf '%s\n' 'Example: ✨ feat: add channel categories' >&2
     exit 1
 fi
-

@@ -13,4 +13,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - PHP 7.0+ compatibility policy and CI matrix.
 - English and Brazilian Portuguese documentation.
 - Automated documentation and release workflows.
-

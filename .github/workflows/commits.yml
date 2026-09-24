@@ -34,4 +34,3 @@ jobs:
             fi
           done < <(git log --format=%s "$BASE_SHA..$HEAD_SHA")
           exit "$failed"
-

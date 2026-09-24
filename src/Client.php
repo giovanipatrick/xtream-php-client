@@ -12,6 +12,7 @@ use Xtream\Exception\InvalidResponseException;
 use Xtream\Exception\NotFoundException;
 use Xtream\Http\CurlHttpClient;
 use Xtream\Http\HttpClientInterface;
+use Xtream\Serializer\SerializerInterface;
 
 /**
  * Client for an Xtream-compatible Player API.
@@ -36,6 +37,9 @@ final class Client
     /** @var array<string, mixed>|null */
     private $profilePayload;
 
+    /** @var SerializerInterface|null */
+    private $serializer;
+
     /**
      * @param array<string, mixed> $options
      */
@@ -48,6 +52,17 @@ final class Client
             ? $this->streamFormat($options['preferred_format'])
             : 'ts';
         $this->profilePayload = null;
+        $this->serializer = null;
+
+        if (isset($options['serializer'])) {
+            if (!$options['serializer'] instanceof SerializerInterface) {
+                throw new InvalidConfigurationException(
+                    'The "serializer" option must implement SerializerInterface.'
+                );
+            }
+
+            $this->serializer = $options['serializer'];
+        }
 
         if (isset($options['http_client'])) {
             if (!$options['http_client'] instanceof HttpClientInterface) {
@@ -72,8 +87,13 @@ final class Client
         return $this->preferredFormat;
     }
 
+    public function getSerializerType(): string
+    {
+        return $this->serializer === null ? 'none' : $this->serializer->getType();
+    }
+
     /**
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function getProfile(): array
     {
@@ -83,11 +103,11 @@ final class Client
             throw new InvalidResponseException('The Xtream API response has no user information.');
         }
 
-        return $payload['user_info'];
+        return $this->serialize('profile', $payload['user_info']);
     }
 
     /**
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function getServerInfo(): array
     {
@@ -97,37 +117,37 @@ final class Client
             throw new InvalidResponseException('The Xtream API response has no server information.');
         }
 
-        return $payload['server_info'];
+        return $this->serialize('serverInfo', $payload['server_info']);
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return array<mixed>
      */
     public function getChannelCategories(): array
     {
-        return $this->listRequest('get_live_categories');
+        return $this->serialize('channelCategories', $this->listRequest('get_live_categories'));
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return array<mixed>
      */
     public function getMovieCategories(): array
     {
-        return $this->listRequest('get_vod_categories');
+        return $this->serialize('movieCategories', $this->listRequest('get_vod_categories'));
     }
 
     /**
-     * @return array<int, array<string, mixed>>
+     * @return array<mixed>
      */
     public function getShowCategories(): array
     {
-        return $this->listRequest('get_series_categories');
+        return $this->serialize('showCategories', $this->listRequest('get_series_categories'));
     }
 
     /**
      * @param array<string, mixed> $options
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<mixed>
      */
     public function getChannels(array $options = []): array
     {
@@ -145,13 +165,13 @@ final class Client
         }
         unset($channel);
 
-        return $channels;
+        return $this->serialize('channels', $channels);
     }
 
     /**
      * @param array<string, mixed> $options
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<mixed>
      */
     public function getMovies(array $options = []): array
     {
@@ -169,13 +189,13 @@ final class Client
         }
         unset($movie);
 
-        return $movies;
+        return $this->serialize('movies', $movies);
     }
 
     /**
      * @param array<string, mixed> $options
      *
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function getMovie(array $options): array
     {
@@ -201,23 +221,23 @@ final class Client
             ]);
         }
 
-        return $movie;
+        return $this->serialize('movie', $movie);
     }
 
     /**
      * @param array<string, mixed> $options
      *
-     * @return array<int, array<string, mixed>>
+     * @return array<mixed>
      */
     public function getShows(array $options = []): array
     {
-        return $this->filterableRequest('get_series', $options);
+        return $this->serialize('shows', $this->filterableRequest('get_series', $options));
     }
 
     /**
      * @param array<string, mixed> $options
      *
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function getShow(array $options): array
     {
@@ -251,13 +271,13 @@ final class Client
             unset($episodes);
         }
 
-        return $show;
+        return $this->serialize('show', $show);
     }
 
     /**
      * @param array<string, mixed> $options
      *
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function getShortEpg(array $options): array
     {
@@ -269,19 +289,22 @@ final class Client
             $parameters['limit'] = $this->positiveInteger($limit, 'limit');
         }
 
-        return $this->request('get_short_epg', $parameters);
+        return $this->serialize('shortEPG', $this->request('get_short_epg', $parameters));
     }
 
     /**
      * @param array<string, mixed> $options
      *
-     * @return array<string, mixed>
+     * @return array<mixed>
      */
     public function getFullEpg(array $options): array
     {
         $channelId = $this->requiredIdentifier($options, 'channel_id', 'channelId');
 
-        return $this->request('get_simple_data_table', ['stream_id' => $channelId]);
+        return $this->serialize(
+            'fullEPG',
+            $this->request('get_simple_data_table', ['stream_id' => $channelId])
+        );
     }
 
     /**
@@ -344,6 +367,18 @@ final class Client
     public function clearProfileCache()
     {
         $this->profilePayload = null;
+    }
+
+    /**
+     * @param array<mixed> $payload
+     *
+     * @return array<mixed>
+     */
+    private function serialize(string $resource, array $payload): array
+    {
+        return $this->serializer === null
+            ? $payload
+            : $this->serializer->serialize($resource, $payload);
     }
 
     /**

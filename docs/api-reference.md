@@ -3,8 +3,9 @@
 ## `Xtream\Client`
 
 The client communicates with `player_api.php` and returns raw associative
-arrays. Credentials are URL-encoded and are never included in library-generated
-exception messages.
+arrays by default. Optional serializers transform the response after stream
+URLs and pagination are applied. Credentials are URL-encoded and are never
+included in library-generated exception messages.
 
 ## Constructor
 
@@ -31,10 +32,54 @@ Optional options:
 | `follow_redirects` | `bool` | `false` | Follow at most three HTTP redirects. |
 | `user_agent` | `string` | package identifier | HTTP User-Agent value. |
 | `http_client` | `HttpClientInterface` | cURL client | Custom injectable transport. |
+| `serializer` | `SerializerInterface` | raw responses | Response serializer. |
 
 Disabling TLS verification should be limited to controlled development
 environments. Redirects are disabled by default because authentication is sent
 in the request query.
+
+## Serializers
+
+```php
+use Xtream\Serializer\CamelCaseSerializer;
+use Xtream\Serializer\StandardizedSerializer;
+use Xtream\Serializer\JsonApiSerializer;
+
+$client = new Client([
+    // credentials and other options
+    'serializer' => new StandardizedSerializer(),
+]);
+
+echo $client->getSerializerType(); // Standardized
+```
+
+`CamelCaseSerializer` changes response keys while preserving provider values.
+`StandardizedSerializer` normalizes names, identifiers, booleans, lists and
+dates; dates are represented by `DateTimeImmutable`. `JsonApiSerializer`
+returns JSON:API resource objects, relationships and included show resources;
+dates are ISO 8601 strings ready for JSON encoding.
+
+Custom serializers can replace only selected resources. Unspecified resources
+remain raw:
+
+```php
+use Xtream\Serializer\CallbackSerializer;
+
+$serializer = new CallbackSerializer('Application', [
+    'channels' => static function (array $channels): array {
+        return array_map(static function (array $channel): array {
+            return [
+                'id' => (string) $channel['stream_id'],
+                'label' => $channel['name'],
+            ];
+        }, $channels);
+    },
+]);
+```
+
+Callback keys are `profile`, `serverInfo`, `channelCategories`,
+`movieCategories`, `showCategories`, `channels`, `movies`, `movie`, `shows`,
+`show`, `shortEPG`, and `fullEPG`. Callbacks must return arrays.
 
 ## Account
 

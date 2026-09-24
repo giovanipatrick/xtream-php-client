@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/giovanipatrick/xtream-php-client/actions/workflows/ci.yml/badge.svg)](https://github.com/giovanipatrick/xtream-php-client/actions/workflows/ci.yml)
 [![Documentação](https://github.com/giovanipatrick/xtream-php-client/actions/workflows/docs.yml/badge.svg)](https://github.com/giovanipatrick/xtream-php-client/actions/workflows/docs.yml)
+[![Última versão estável](https://poser.pugx.org/giovanipatrick/xtream-php-client/v/stable)](https://packagist.org/packages/giovanipatrick/xtream-php-client)
 [![Licença: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 [English](README.md) | Português do Brasil
@@ -19,11 +20,12 @@ Um cliente PHP 7.0+ para APIs IPTV Player compatíveis com Xtream.
 - Geração de URLs para live, filme, episódio, timeshift e XMLTV.
 - Credenciais codificadas com segurança e exceções sem respostas ou segredos.
 - Transporte HTTP injetável para testes determinísticos.
+- Respostas raw, Camel Case, Standardized, JSON:API e callbacks customizados.
 - Permanecer compatível do PHP 7.0 às versões atuais do PHP.
 - Manter o runtime leve e independente de frameworks.
 
-Serializadores de respostas e modelos de dados normalizados estão planejados
-para um próximo marco. Atualmente, os métodos retornam arrays associativos raw.
+Por padrão, os métodos retornam arrays associativos raw. Serializadores
+opcionais podem normalizar todas as respostas sem alterar as chamadas.
 
 ## Requisitos
 
@@ -48,12 +50,14 @@ composer require giovanipatrick/xtream-php-client
 require __DIR__ . '/vendor/autoload.php';
 
 use Xtream\Client;
+use Xtream\Serializer\StandardizedSerializer;
 
 $client = new Client([
     'url' => 'https://example.com',
     'username' => 'username',
     'password' => 'password',
     'preferred_format' => 'm3u8',
+    'serializer' => new StandardizedSerializer(),
 ]);
 
 $profile = $client->getProfile();
@@ -73,6 +77,11 @@ $show = $client->getShow(['show_id' => 456]);
 $shortEpg = $client->getShortEpg(['channel_id' => 789, 'limit' => 5]);
 $fullEpg = $client->getFullEpg(['channel_id' => 789]);
 ```
+
+Os serializadores disponíveis são `CamelCaseSerializer`,
+`StandardizedSerializer` e `JsonApiSerializer`. Use `CallbackSerializer` para
+sobrescrever apenas respostas específicas. Omita `serializer` para manter os
+arrays raw do provedor.
 
 São aceitos tanto os nomes de opções em `snake_case` quanto as alternativas
 camelCase da inspiração em TypeScript. Consulte a

@@ -1,0 +1,49 @@
+name: Bug report
+description: Report reproducible incorrect behavior
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: Do not include provider credentials, API responses, playlists, or stream URLs.
+  - type: input
+    id: version
+    attributes:
+      label: Package version
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: php
+    attributes:
+      label: PHP version
+      options:
+        - "7.0"
+        - "7.1"
+        - "7.2"
+        - "7.3"
+        - "7.4"
+        - "8.0"
+        - "8.1"
+        - "8.2"
+        - "8.3"
+        - "8.4"
+        - "8.5"
+    validations:
+      required: true
+  - type: textarea
+    id: behavior
+    attributes:
+      label: What happened?
+      description: Use sanitized data only.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Do not paste secrets or real provider responses.
+    validations:
+      required: true
+

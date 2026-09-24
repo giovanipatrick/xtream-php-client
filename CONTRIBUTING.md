@@ -9,7 +9,8 @@ branch from the latest `main` and submit a pull request when the change is
 complete.
 
 Recommended branch prefixes are `feat/`, `fix/`, `docs/`, `test/`, `refactor/`,
-and `chore/`. 
+and `chore/`.
+
 Codex-created branches use the required `codex/` prefix.
 Claude-created branches use the required `claude/` prefix.
 
